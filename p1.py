@@ -1,6 +1,10 @@
+def sayhey(str):
+    print('hey %s' %str)
+
 
 def main():
-    print "He"
+    name = 'name'
+    sayhey(name)
 
 
 if __name__ == "__main__":
