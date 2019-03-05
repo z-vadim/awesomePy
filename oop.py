@@ -29,7 +29,7 @@ class Designer(Employee):
         self.eff_coefficient = eff_coefficient
 
     def getSalary(self):
-        return self.salary * self.eff_coefficient
+        return Employee.getSalary(self) * self.eff_coefficient
 
 
 class Manager(Employee):
