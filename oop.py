@@ -1,8 +1,14 @@
-class Employee:
-    employee_id = 0
+class Department:
     list_of_managers = []
     POSITIONS = {'developer', 'designer', 'manager'}
     team_list = {}
+
+    def get_salary(self):
+        pass
+
+
+class Employee(Department):
+    employee_id = 0
 
     def __init__(self, first_name, second_name, salary, experience, team_id):
         self.first_name = first_name
@@ -10,9 +16,9 @@ class Employee:
         self.salary = salary
         self.experience = experience
         self.team_id = team_id
-        Employee.employee_id += 1
+        self.employee_id += 1
 
-    def getSalary(self):
+    def get_salary(self):
         if self.experience > 2:
             self.salary += 200
         if self.experience > 5:
@@ -23,13 +29,23 @@ class Employee:
         return "%s %s %s %s" % (self.first_name, self.second_name, self.salary, self.experience)
 
 
+class Developer(Employee):
+    def __init__(self, first_name, second_name, salary, experience, team_id, eff_coefficient):
+        super().__init__(first_name, second_name, salary, experience, team_id)
+
+    def __str__(self):
+        return "%s %s %s %s" % (self.first_name, self.second_name, self.salary, self.experience)
+
 class Designer(Employee):
     def __init__(self, first_name, second_name, salary, experience, team_id, eff_coefficient):
         super().__init__(first_name, second_name, salary, experience, team_id)
         self.eff_coefficient = eff_coefficient
 
-    def getSalary(self):
-        return Employee.getSalary(self) * self.eff_coefficient
+    def get_salary(self):
+        return Employee.get_salary(self) * self.eff_coefficient
+
+    def __str__(self):
+        return "%s %s %s %s" % (self.first_name, self.second_name, self.salary, self.experience)
 
 
 class Manager(Employee):
@@ -49,7 +65,9 @@ class Manager(Employee):
                 self.salary = self.salary *1.1
         return self.salary
 
+    def __str__(self):
+        return "%s %s %s %s" % (self.first_name, self.second_name, self.salary, self.experience)
 
 d=Designer('Ivan','Ivanov', 100, 3, '3', 4)
 print(d)
-print(d.getSalary())
+print(d.get_salary())
