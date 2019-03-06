@@ -1,10 +1,8 @@
 class Department:
-    list_of_managers = []
-    POSITIONS = {'developer', 'designer', 'manager'}
     team_list = {}
 
     def __init__(self, team_list):
-        self.team_list = team_list
+        self.team_list = team_list()
 
     def get_salary(self):
         pass
@@ -14,7 +12,6 @@ class Department:
 
 
 class Employee(Department):
-    employee_id = 0
 
     def __init__(self, first_name, second_name, salary, experience, team_id, position):
         self.first_name = first_name
@@ -23,19 +20,15 @@ class Employee(Department):
         self.experience = experience
         self.team_id = team_id
         self.position = position
-        #self.position = Department.POSITIONS
-        self.employee_id += 1
 
     def add_to_team(self):
-        # team_id -> position -> firstName,secondName
-#         for team_id, position, name in Department.team_list:
-#             Department.team_list[team_id].append(self.team_id)
-#             Department.team_list[position].append(self.position)
-#             Department.team_list[name].append(self.first_name + ' ' + self.second_name)
-# #        print(Department.team_list)
-        Department.team_list = ({'team_id': self.team_id, 'position': self.position, 'name': self.first_name + ' ' + self.second_name})
-
-
+        if self.team_id in self.team_list.keys():
+            if self.position in Department.team_list[self.team_id][0]:
+                Department.team_list[self.team_id][0].append([self.first_name + ' ' + self.second_name])
+            else:
+                Department.team_list[self.team_id].append([self.position, [self.first_name + ' ' + self.second_name]])
+        else:
+            Department.team_list[self.team_id] = [[self.position, [self.first_name + ' ' + self.second_name]]]
 
     def get_salary(self):
         if self.experience > 2:
@@ -46,6 +39,9 @@ class Employee(Department):
 
     def __str__(self):
         return "%s %s %s %s" % (self.first_name, self.second_name, self.salary, self.experience)
+
+    def __repr__(self):
+        return "%s %s, manager %s, experience %s" % (self.first_name, self.second_name, self.manager, self.experience)
 
 
 class Developer(Employee):
@@ -72,17 +68,16 @@ class Manager(Employee):
     def __init__(self, first_name, second_name, salary, experience, team_id, position='man'):
         super().__init__(first_name, second_name, salary, experience, team_id, position)
 
-    def getSalary(self):
-        if len(self.team_list) > 5:
-            self.salary + 200
-        if len(self.team_list) > 10:
-            self.salary + 300
-            dev_count = 0
-        for member in self.team_list:
-            if member == 'developer':
-                dev_count += 1
-            if dev_count > len(self.team_list/2):
-                self.salary = self.salary *1.1
+    def get_salary(self):
+        for x in Department.team_list[self.team_id]:
+            if x[0] == 'des':
+                if (len(x[0])-1) > 1:
+                    self.salary += 200
+                if (len(x[0])-1) > 10:
+                    self.salary += 300
+                if len(x[0])>len(x)/2:
+                    print('lan -- %s' %len(x))
+                    self.salary = int(self.salary*1.1)
         return self.salary
 
     def __str__(self):
@@ -91,8 +86,16 @@ class Manager(Employee):
 
 d=Designer('Ivan','Ivanov', salary=100, experience=3, team_id=11, eff_coefficient=4)
 d.add_to_team()
+a=Designer('Ivan','Petrov', salary=100, experience=1, team_id=11, eff_coefficient=4)
+a.add_to_team()
+b=Designer('Petr','Ivanov', salary=100, experience=1, team_id=12, eff_coefficient=1)
+b.add_to_team()
+c=Developer('Ya','Ya', salary=100, experience=1, team_id=12)
+c.add_to_team()
 m=Manager('Petr','Petrov', salary=100, experience=3, team_id=11)
 m.add_to_team()
 print(d)
 print(d.get_salary())
 print(Department.team_list)
+print(m)
+print(m.get_salary())
